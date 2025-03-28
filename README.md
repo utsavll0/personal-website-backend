@@ -1,28 +1,77 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+---
+# LLM Chatbot API
+---
 
-# Flask + Vercel
+Welcome to the LLM Chatbot API! This project is designed to integrate an intelligent chatbot into my personal website, enabling users to get insightful responses based on pre-stored data.
 
-This example shows how to use Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+## Tech Stack
 
-## Demo
+The following technologies power the LLM Chatbot API:
 
-https://flask-python-template.vercel.app/
+- **Flask**: Lightweight web framework to expose the API endpoints.
+- **Sentence Transformers**: Used for generating embeddings from textual data.
+- **Pinecone**: A vector database to store and efficiently retrieve sentence embeddings.
+- **Groq (Not to be confused with Grok by Elon Musk!)**: A Large Language Model (LLM) used for generating insightful responses.
 
-## How it Works
+## How It Works
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+Here’s a step-by-step breakdown of the process:
 
-## Running Locally
+### 1. **Data Preparation**
 
-```bash
-npm i -g vercel
-vercel dev
-```
+- All input data is stored in a structured JSON format. This data serves as the knowledge base for the chatbot.
 
-Your Flask application is now available at `http://localhost:3000`.
+### 2. **Embeddings Creation**
 
-## One-Click Deploy
+- The data is processed through the **all-MiniLM-L6-v2** model (part of the Sentence Transformers library) to convert each sentence into high-dimensional embeddings.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+### 3. **Storing Embeddings**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+- The generated embeddings are stored in **Pinecone**, a vector database, allowing for efficient and fast retrieval during query processing.
+
+### 4. **Retrieving Relevant Results**
+
+- When a user sends a query, the API retrieves the top 5 most relevant results from the vector database using **cosine similarity**. This ensures the most relevant pieces of information are returned.
+
+### 5. **Final Response Generation**
+
+- The top 5 results are then passed to the **deepseek-r1-distill-llama-70b** Large Language Model (LLM) to generate a coherent and contextually appropriate response to the user’s query.
+
+---
+
+## Features
+
+- **Fast Response Time**: The use of vector embeddings ensures efficient retrieval of relevant data.
+- **Seamless Integration**: Easily integrates with your personal website for a more interactive experience.
+- **Scalable**: Can handle large datasets and provide insightful responses across various domains.
+
+## Running the Project
+
+### Prerequisites
+
+- Python 3.x
+- Install dependencies via `pip install -r requirements.txt`.
+
+### Running the embeddings setup
+
+1. Change directory to `embeddings/`
+2. Run `python embeddings.py` to run the embeddings code
+
+This will transform all data in the json file to embeddings and store in the pinecone db.
+
+### Running the API
+
+1. Clone this repository.
+2. Install the required packages.
+3. Run the Flask app:
+   ```bash
+   python api/index.py
+   ```
+
+The API will be up and running, ready to handle your queries!
+
+---
+
+## Conclusion
+
+This API serves as a powerful tool for integrating AI-driven conversations into any platform, allowing for dynamic interactions based on your custom dataset. With the combination of vector embeddings and an LLM, this project provides an intelligent and scalable solution for creating a chatbot that can understand and respond with meaningful information.
